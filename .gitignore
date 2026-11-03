@@ -1,0 +1,25 @@
+# Maven / Java
+target/
+*.class
+*.log
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Frontend
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+
+# Backend tajne i lokalni fajlovi
+application-local.properties
+uploads/
+
+# Zip fajlovi
+*.zip
+**/.mvn/settings.xml

@@ -1,0 +1,8 @@
+# Kopiraj ovaj fajl u application-local.properties i upisi prave vrednosti.
+spring.datasource.url=jdbc:sqlserver://HOST:1433;databaseName=IME_BAZE;encrypt=true;trustServerCertificate=true
+spring.datasource.username=KORISNIK
+spring.datasource.password=LOZINKA
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+# JWT secret (bar 32 karaktera)
+app.jwt.secret=PROMENI_OVO_U_DUGACKU_RANDOM_TAJNU
