@@ -14,6 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import minijira.example.minijiraaa.application.mapper.UserMapper;
+import minijira.example.minijiraaa.application.mapper.UserMapperImpl;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,6 +35,8 @@ class AuthServiceTest {
     @Mock UserStore userStore;
     @Mock PasswordEncoder passwordEncoder;
     @Mock JwtService jwtService;
+
+    @Spy UserMapper userMapper = new UserMapperImpl();
 
     @InjectMocks AuthService authService;
 

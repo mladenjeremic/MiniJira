@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import minijira.example.minijiraaa.application.access.ActivityAccess;
 import minijira.example.minijiraaa.domain.store.ActivityLogStore;
 import minijira.example.minijiraaa.application.dto.ActivityResponse;
+import minijira.example.minijiraaa.application.mapper.ActivityMapper;
 import minijira.example.minijiraaa.domain.enums.ActivityType;
 import minijira.example.minijiraaa.domain.model.ActivityLog;
 import minijira.example.minijiraaa.domain.model.Project;
@@ -20,6 +21,7 @@ public class ActivityLogService implements ActivityAccess {
     private static final int MAX_VALUE_LENGTH = 500;
 
     private final ActivityLogStore activityLogStore;
+    private final ActivityMapper activityMapper;
 
     @Override
     @Transactional
@@ -47,10 +49,9 @@ public class ActivityLogService implements ActivityAccess {
     @Override
     @Transactional(readOnly = true)
     public List<ActivityResponse> getForProject(Long projectId) {
-        return activityLogStore.findLatestByProjectId(projectId)
-                .stream()
-                .map(ActivityResponse::from)
-                .toList();
+        return activityMapper.toResponseList(
+                activityLogStore.findLatestByProjectId(projectId)
+        );
     }
 
     private static String cut(String value) {

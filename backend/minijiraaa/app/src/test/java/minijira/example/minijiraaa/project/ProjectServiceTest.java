@@ -19,6 +19,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import minijira.example.minijiraaa.application.mapper.UserMapper;
+import minijira.example.minijiraaa.application.mapper.UserMapperImpl;
+import minijira.example.minijiraaa.application.mapper.ProjectMapper;
+import minijira.example.minijiraaa.application.mapper.ProjectMapperImpl;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
 
@@ -41,6 +46,9 @@ class ProjectServiceTest {
     @Mock ProjectTaskAccess projectTaskAccess;
     @Mock UserAccess userAccess;
     @Mock ActivityAccess activityAccess;
+
+    @Spy UserMapper userMapper = new UserMapperImpl();
+    @Spy ProjectMapper projectMapper = new ProjectMapperImpl(userMapper);
 
     @InjectMocks ProjectService projectService;
 

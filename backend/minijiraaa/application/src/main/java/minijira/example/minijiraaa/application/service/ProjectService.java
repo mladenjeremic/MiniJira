@@ -9,6 +9,7 @@ import minijira.example.minijiraaa.application.activity.LogActivity;
 import minijira.example.minijiraaa.application.dto.ActivityResponse;
 import minijira.example.minijiraaa.application.dto.ProjectRequest;
 import minijira.example.minijiraaa.application.dto.ProjectResponse;
+import minijira.example.minijiraaa.application.mapper.ProjectMapper;
 import minijira.example.minijiraaa.domain.enums.ActivityType;
 import minijira.example.minijiraaa.domain.exception.ConflictException;
 import minijira.example.minijiraaa.domain.exception.NotFoundException;
@@ -37,11 +38,13 @@ public class ProjectService implements ProjectAccess {
     // Ostaje samo za čitanje history-ja (getHistory). Upis radi ActivityLogAspect.
     private final ActivityAccess activityAccess;
 
+    private final ProjectMapper projectMapper;
+
     @Transactional(readOnly = true)
     public List<ProjectResponse> getAll(User currentUser) {
         return projectStore.findAccessibleByUserId(currentUser.getId())
                 .stream()
-                .map(project -> ProjectResponse.from(
+                .map(project -> projectMapper.toResponse(
                         project,
                         projectTaskAccess.countByProjectId(project.getId())
                 ))
@@ -54,7 +57,7 @@ public class ProjectService implements ProjectAccess {
 
         Project project = getEntityById(id);
 
-        return ProjectResponse.from(
+        return projectMapper.toResponse(
                 project,
                 projectTaskAccess.countByProjectId(id)
         );
@@ -84,7 +87,7 @@ public class ProjectService implements ProjectAccess {
 
         projectStore.save(project);
 
-        return ProjectResponse.from(project, 0);
+        return projectMapper.toResponse(project, 0);
     }
 
     @Override
@@ -154,6 +157,6 @@ public class ProjectService implements ProjectAccess {
 
         long taskCount = projectTaskAccess.countByProjectId(projectId);
 
-        return ProjectResponse.from(savedProject, taskCount);
+        return projectMapper.toResponse(savedProject, taskCount);
     }
 }

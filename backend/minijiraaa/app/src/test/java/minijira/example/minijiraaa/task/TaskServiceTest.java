@@ -21,6 +21,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import minijira.example.minijiraaa.application.mapper.UserMapper;
+import minijira.example.minijiraaa.application.mapper.UserMapperImpl;
+import minijira.example.minijiraaa.application.mapper.TaskMapper;
+import minijira.example.minijiraaa.application.mapper.TaskMapperImpl;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -45,6 +50,9 @@ class TaskServiceTest {
     @Mock TaskStore taskStore;
     @Mock ProjectAccess projectAccess;
     @Mock UserAccess userAccess;
+
+    @Spy UserMapper userMapper = new UserMapperImpl();
+    @Spy TaskMapper taskMapper = new TaskMapperImpl(userMapper);
 
     @InjectMocks TaskService taskService;
 

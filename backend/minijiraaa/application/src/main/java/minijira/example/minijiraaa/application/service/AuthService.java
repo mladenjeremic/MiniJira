@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import minijira.example.minijiraaa.application.dto.AuthResponse;
 import minijira.example.minijiraaa.application.dto.LoginRequest;
 import minijira.example.minijiraaa.application.dto.RegisterRequest;
-import minijira.example.minijiraaa.application.dto.UserResponse;
+import minijira.example.minijiraaa.application.mapper.UserMapper;
 import minijira.example.minijiraaa.domain.exception.ConflictException;
 import minijira.example.minijiraaa.domain.exception.InvalidCredentialsException;
 import minijira.example.minijiraaa.domain.model.User;
@@ -21,6 +21,7 @@ public class AuthService {
     private final UserStore userStore;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserMapper userMapper;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -43,7 +44,7 @@ public class AuthService {
 
         return new AuthResponse(
                 jwtService.generateToken(savedUser),
-                UserResponse.from(savedUser)
+                userMapper.toResponse(savedUser)
         );
     }
 
@@ -62,7 +63,7 @@ public class AuthService {
 
         return new AuthResponse(
                 jwtService.generateToken(user),
-                UserResponse.from(user)
+                userMapper.toResponse(user)
         );
     }
 }

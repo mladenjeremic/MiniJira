@@ -7,6 +7,7 @@ import minijira.example.minijiraaa.domain.store.CommentStore;
 import minijira.example.minijiraaa.domain.store.ImageStore;
 import minijira.example.minijiraaa.application.dto.CommentRequest;
 import minijira.example.minijiraaa.application.dto.CommentResponse;
+import minijira.example.minijiraaa.application.mapper.CommentMapper;
 import minijira.example.minijiraaa.domain.enums.ActivityType;
 import minijira.example.minijiraaa.domain.model.Comment;
 import minijira.example.minijiraaa.domain.model.Task;
@@ -41,6 +42,7 @@ public class CommentService {
     private final CommentStore commentStore;
     private final TaskAccess taskAccess;
     private final ImageStore imageStore; // DODATO
+    private final CommentMapper commentMapper;
 
     @Transactional(readOnly = true)
     public List<CommentResponse> getForTask(Long taskId, User user) {
@@ -48,7 +50,7 @@ public class CommentService {
 
         return commentStore.findByTaskIdOrderByCreatedAtAsc(taskId)
                 .stream()
-                .map(CommentResponse::from)
+                .map(commentMapper::toResponse)
                 .toList();
     }
 
@@ -125,7 +127,7 @@ public class CommentService {
 
         commentStore.save(comment);
 
-        return CommentResponse.from(comment);
+        return commentMapper.toResponse(comment);
     }
 
     @LogActivity(ActivityType.COMMENT_UPDATED)
@@ -165,7 +167,7 @@ public class CommentService {
         comment.setText(request.text().trim());
         commentStore.save(comment);
 
-        return CommentResponse.from(comment);
+        return commentMapper.toResponse(comment);
     }
 
     @LogActivity(ActivityType.COMMENT_DELETED)
