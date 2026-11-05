@@ -3,6 +3,7 @@ package minijira.example.minijiraaa.application.service;
 import lombok.RequiredArgsConstructor;
 import minijira.example.minijiraaa.application.access.UserAccess;
 import minijira.example.minijiraaa.application.dto.UserResponse;
+import minijira.example.minijiraaa.application.mapper.UserMapper;
 import minijira.example.minijiraaa.domain.exception.NotFoundException;
 import minijira.example.minijiraaa.domain.model.User;
 import minijira.example.minijiraaa.domain.store.UserStore;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class UserService implements UserAccess {
 
     private final UserStore userStore;
+    private final UserMapper userMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -36,14 +38,11 @@ public class UserService implements UserAccess {
 
     @Transactional(readOnly = true)
     public UserResponse getById(Long id) {
-        return UserResponse.from(getEntityById(id));
+        return userMapper.toResponse(getEntityById(id));
     }
 
     @Transactional(readOnly = true)
     public List<UserResponse> getAll() {
-        return userStore.findAll()
-                .stream()
-                .map(UserResponse::from)
-                .toList();
+        return userMapper.toResponseList(userStore.findAll());
     }
 }

@@ -18,6 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import minijira.example.minijiraaa.application.mapper.UserMapper;
+import minijira.example.minijiraaa.application.mapper.UserMapperImpl;
+import minijira.example.minijiraaa.application.mapper.CommentMapper;
+import minijira.example.minijiraaa.application.mapper.CommentMapperImpl;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,6 +44,9 @@ class CommentServiceTest {
     @Mock CommentStore commentStore;
     @Mock TaskAccess taskAccess;
     @Mock ImageStore imageStore;
+
+    @Spy UserMapper userMapper = new UserMapperImpl();
+    @Spy CommentMapper commentMapper = new CommentMapperImpl(userMapper);
 
     @InjectMocks CommentService commentService;
 

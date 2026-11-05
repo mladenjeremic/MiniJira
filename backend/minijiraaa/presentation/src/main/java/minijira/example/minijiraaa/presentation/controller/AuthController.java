@@ -6,6 +6,7 @@ import minijira.example.minijiraaa.application.dto.AuthResponse;
 import minijira.example.minijiraaa.application.dto.LoginRequest;
 import minijira.example.minijiraaa.application.dto.RegisterRequest;
 import minijira.example.minijiraaa.application.dto.UserResponse;
+import minijira.example.minijiraaa.application.mapper.UserMapper;
 import minijira.example.minijiraaa.domain.model.User;
 import minijira.example.minijiraaa.application.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserMapper userMapper;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,6 +34,6 @@ public class AuthController {
 
     @GetMapping("/me")
     public UserResponse me(@AuthenticationPrincipal User user) {
-        return UserResponse.from(user);
+        return userMapper.toResponse(user);
     }
 }

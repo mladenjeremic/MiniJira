@@ -7,6 +7,7 @@ import minijira.example.minijiraaa.application.access.UserAccess;
 import minijira.example.minijiraaa.application.activity.LogActivity;
 import minijira.example.minijiraaa.application.dto.TaskRequest;
 import minijira.example.minijiraaa.application.dto.TaskResponse;
+import minijira.example.minijiraaa.application.mapper.TaskMapper;
 import minijira.example.minijiraaa.domain.enums.ActivityType;
 import minijira.example.minijiraaa.domain.enums.Priority;
 import minijira.example.minijiraaa.domain.enums.Status;
@@ -32,6 +33,7 @@ public class TaskService implements TaskAccess {
     private final TaskStore taskStore;
     private final ProjectAccess projectAccess;
     private final UserAccess userAccess;
+    private final TaskMapper taskMapper;
 
     @Transactional(readOnly = true)
     public List<TaskResponse> getForProject(
@@ -78,13 +80,13 @@ public class TaskService implements TaskAccess {
 
         return taskStore.findAll(spec, buildSort(sortBy, dir))
                 .stream()
-                .map(TaskResponse::from)
+                .map(taskMapper::toResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public TaskResponse getById(Long id, User currentUser) {
-        return TaskResponse.from(getEntityForUser(id, currentUser));
+        return taskMapper.toResponse(getEntityForUser(id, currentUser));
     }
 
     @LogActivity(ActivityType.TASK_CREATED)
@@ -103,7 +105,7 @@ public class TaskService implements TaskAccess {
 
         apply(task, request);
 
-        return TaskResponse.from(taskStore.save(task));
+        return taskMapper.toResponse(taskStore.save(task));
     }
 
     @LogActivity(ActivityType.TASK_UPDATED)
@@ -117,7 +119,7 @@ public class TaskService implements TaskAccess {
 
         apply(task, request);
 
-        return TaskResponse.from(taskStore.save(task));
+        return taskMapper.toResponse(taskStore.save(task));
     }
 
     @LogActivity(ActivityType.TASK_UPDATED)
@@ -131,7 +133,7 @@ public class TaskService implements TaskAccess {
 
         task.setStatus(status);
 
-        return TaskResponse.from(taskStore.save(task));
+        return taskMapper.toResponse(taskStore.save(task));
     }
 
     @LogActivity(ActivityType.TASK_DELETED)
@@ -160,11 +162,7 @@ public class TaskService implements TaskAccess {
     }
 
     private void apply(Task task, TaskRequest request) {
-        task.setTitle(request.title().trim());
-        task.setDescription(request.description());
-        task.setType(request.type());
-        task.setPriority(request.priority());
-        task.setStatus(request.status());
+        taskMapper.updateEntity(request, task);
 
         Long assigneeId = request.assigneeId();
 

@@ -12,6 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import minijira.example.minijiraaa.application.mapper.UserMapper;
+import minijira.example.minijiraaa.application.mapper.UserMapperImpl;
+import minijira.example.minijiraaa.application.mapper.ActivityMapper;
+import minijira.example.minijiraaa.application.mapper.ActivityMapperImpl;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -24,6 +29,9 @@ import static org.mockito.Mockito.when;
 class ActivityLogServiceTest {
 
     @Mock ActivityLogStore activityLogStore;
+
+    @Spy UserMapper userMapper = new UserMapperImpl();
+    @Spy ActivityMapper activityMapper = new ActivityMapperImpl(userMapper);
 
     @InjectMocks ActivityLogService activityLogService;
 
