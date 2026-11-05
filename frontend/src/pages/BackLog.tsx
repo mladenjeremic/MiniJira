@@ -13,6 +13,7 @@ import { columns, KeyBadge, PriorityBadge, StatusBadge, TypeIcon, UserAvatar } f
 import FilterBar, { applyFilters, emptyFilters, type Filters } from '@/components/ui/FilterBar'
 import ProjectHeader from '@/components/ui/ProjectHeader'
 import TaskDetailDialog from '@/components/ui/TaskDetailDialog'
+import NoProjectAccess from '@/components/ui/NoProjectAccess'
 
 type SortField =
   | 'number'
